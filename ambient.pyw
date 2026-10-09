@@ -4,6 +4,7 @@ import win32con
 import cv2
 import numpy as np
 import configparser
+import tkinter as tk
 
 # Initial settings
 initial_contrast = 1.0
@@ -112,6 +113,24 @@ def main():
     global contrast_level, brightness_level, image_scale_factor, blur_amount, capture_mode  # Use the global variables
     global key_states
 
+    #creating root window
+    root = tk.Tk()
+    root.title("Settings")
+    root.geometry("400x300")
+
+    def increase_contrast():
+        contrast_level += adjustment_step
+
+    label1 = tk.Label(root, text="contrast", padx=12, pady=6).pack(pady=8)
+    button1 = tk.Button(root, text="increase", command=increase_contrast).pack(pady = 8)
+
+    def refresh_window():
+        root.update()
+        root.update_idletasks()
+    
+    refreshbutton = tk.Button(root, text="refresh", command=refresh_window).pack(pady = 8)
+
+
     hwnd = win32gui.GetDesktopWindow()
 
     cv2.namedWindow("Display", cv2.WINDOW_NORMAL | cv2.WINDOW_GUI_NORMAL)
@@ -196,6 +215,8 @@ def main():
         except cv2.error as e:
             if "NULL window" in str(e):
                 break
+
+    root.mainloop()
 
     cv2.destroyAllWindows()
 
